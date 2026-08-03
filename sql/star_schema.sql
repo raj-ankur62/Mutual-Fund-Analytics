@@ -3,7 +3,7 @@
 -- ==========================================
 
 CREATE TABLE dim_fund (
-    fund_id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    fund_id INTEGER PRIMARY KEY AUTOINCREMENT,
     amfi_code INTEGER UNIQUE NOT NULL,
     fund_name TEXT NOT NULL,
     fund_house TEXT,
@@ -16,7 +16,7 @@ CREATE TABLE dim_fund (
 -- ==========================================
 
 CREATE TABLE dim_date (
-    date_id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    date_id INTEGER PRIMARY KEY AUTOINCREMENT,
     full_date DATE UNIQUE NOT NULL,
     day INTEGER,
     month INTEGER,
@@ -30,7 +30,7 @@ CREATE TABLE dim_date (
 -- ==========================================
 
 CREATE TABLE fact_nav (
-    nav_id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    nav_id INTEGER PRIMARY KEY AUTOINCREMENT,
     fund_id INTEGER NOT NULL,
     date_id INTEGER NOT NULL,
     nav_value REAL NOT NULL,
@@ -44,12 +44,12 @@ CREATE TABLE fact_nav (
 -- ==========================================
 
 CREATE TABLE fact_transactions (
-    transaction_id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    transaction_id INTEGER PRIMARY KEY AUTOINCREMENT,
     fund_id INTEGER NOT NULL,
     date_id INTEGER NOT NULL,
+    investor_id TEXT,
     transaction_type TEXT,
     amount_inr REAL,
-    investor_id TEXT,
     kyc_status TEXT,
 
     FOREIGN KEY (fund_id) REFERENCES dim_fund(fund_id),
@@ -61,7 +61,7 @@ CREATE TABLE fact_transactions (
 -- ==========================================
 
 CREATE TABLE fact_performance (
-    performance_id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    performance_id INTEGER PRIMARY KEY AUTOINCREMENT,
     fund_id INTEGER NOT NULL,
     benchmark_3yr_pct REAL,
     alpha REAL,
@@ -78,7 +78,7 @@ CREATE TABLE fact_performance (
 -- ==========================================
 
 CREATE TABLE fact_aum (
-    aum_id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    aum_id INTEGER PRIMARY KEY AUTOINCREMENT,
     fund_id INTEGER NOT NULL,
     date_id INTEGER NOT NULL,
     aum_crore REAL,
