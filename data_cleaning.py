@@ -1,49 +1,68 @@
 import pandas as pd
 import os
 
-print("Current Working Directory:", os.getcwd())
 
-# Load dataset
-df = pd.read_csv("data/raw/02_nav_history.csv")
+raw_folder = "data/raw/"
+processed_folder = "data/processed/"
 
-print("Original Shape:", df.shape)
 
-# 1. Convert date column to datetime
-df["date"] = pd.to_datetime(df["date"], errors="coerce")
+files = [
+    "01_fund_master.csv",
+    "02_nav_history.csv",
+    "03_aum_by_fund_house.csv",
+    "04_monthly_sip_inflows.csv",
+    "05_category_inflows.csv",
+    "06_industry_folio_count.csv",
+    "07_scheme_performance.csv",
+    "08_investor_transactions.csv",
+    "09_portfolio_holdings.csv",
+    "10_benchmark_indices.csv"
+]
 
-# Remove invalid dates
-df = df.dropna(subset=["date"])
 
-# 2. Sort by AMFI Code and Date
-df = df.sort_values(by=["amfi_code", "date"])
+for file in files:
 
-# 3. Remove duplicate records
-before = len(df)
-df = df.drop_duplicates(subset=["amfi_code", "date"], keep="last")
-print("Duplicates Removed:", before - len(df))
+    print("\nCleaning:", file)
 
-# 4. Forward-fill missing NAV
-df["nav"] = df.groupby("amfi_code")["nav"].ffill()
+    df = pd.read_csv(raw_folder + file)
 
-# 5. Validate NAV > 0
-invalid_nav = df[df["nav"] <= 0]
 
-if invalid_nav.empty:
-    print("✅ All NAV values are greater than 0.")
-else:
-    print("❌ Invalid NAV records found:")
-    print(invalid_nav)
+    # Remove duplicates
+    df.drop_duplicates(inplace=True)
 
-# Remove remaining missing NAV values
-df = df.dropna(subset=["nav"])
 
-# Create processed folder if it doesn't exist
-os.makedirs("data/processed", exist_ok=True)
+    # Clean column names
+    df.columns = (
+        df.columns
+        .str.strip()
+        .str.lower()
+        .str.replace(" ", "_")
+    )
 
-# Save cleaned dataset
-output_file = "data/processed/nav_history_clean.csv"
-df.to_csv(output_file, index=False)
 
-print("\nCleaning completed successfully!")
-print("Final Shape:", df.shape)
-print("Saved to:", output_file)
+    # Handle missing values
+    for col in df.columns:
+
+        if df[col].dtype == "object":
+            df[col] = df[col].fillna("Unknown")
+            df[col] = df[col].str.strip()
+
+        else:
+            df[col] = df[col].fillna(0)
+
+
+    # Save file
+
+    output_file = file.replace(".csv", "_clean.csv")
+
+
+    df.to_csv(
+        processed_folder + output_file,
+        index=False
+    )
+
+
+    print("Saved:", output_file)
+
+
+print("All CSV Cleaning Completed")
