@@ -2,7 +2,7 @@
 -- Dimension Table: Fund
 -- ==========================================
 
-CREATE TABLE dim_fund (
+CREATE TABLE IF NOT EXISTS dim_fund (
     fund_id INTEGER PRIMARY KEY AUTOINCREMENT,
     amfi_code INTEGER UNIQUE NOT NULL,
     fund_name TEXT NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE dim_fund (
 -- Dimension Table: Date
 -- ==========================================
 
-CREATE TABLE dim_date (
+CREATE TABLE IF NOT EXISTS dim_date (
     date_id INTEGER PRIMARY KEY AUTOINCREMENT,
     full_date DATE UNIQUE NOT NULL,
     day INTEGER,
@@ -29,7 +29,7 @@ CREATE TABLE dim_date (
 -- Fact Table: NAV
 -- ==========================================
 
-CREATE TABLE fact_nav (
+CREATE TABLE IF NOT EXISTS fact_nav (
     nav_id INTEGER PRIMARY KEY AUTOINCREMENT,
     fund_id INTEGER NOT NULL,
     date_id INTEGER NOT NULL,
@@ -43,7 +43,7 @@ CREATE TABLE fact_nav (
 -- Fact Table: Transactions
 -- ==========================================
 
-CREATE TABLE fact_transactions (
+CREATE TABLE IF NOT EXISTS fact_transactions (
     transaction_id INTEGER PRIMARY KEY AUTOINCREMENT,
     fund_id INTEGER NOT NULL,
     date_id INTEGER NOT NULL,
@@ -60,7 +60,7 @@ CREATE TABLE fact_transactions (
 -- Fact Table: Performance
 -- ==========================================
 
-CREATE TABLE fact_performance (
+CREATE TABLE IF NOT EXISTS fact_performance (
     performance_id INTEGER PRIMARY KEY AUTOINCREMENT,
     fund_id INTEGER NOT NULL,
     benchmark_3yr_pct REAL,
@@ -77,7 +77,7 @@ CREATE TABLE fact_performance (
 -- Fact Table: AUM
 -- ==========================================
 
-CREATE TABLE fact_aum (
+CREATE TABLE IF NOT EXISTS fact_aum (
     aum_id INTEGER PRIMARY KEY AUTOINCREMENT,
     fund_id INTEGER NOT NULL,
     date_id INTEGER NOT NULL,

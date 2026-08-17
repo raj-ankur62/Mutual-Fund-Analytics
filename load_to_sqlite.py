@@ -1,14 +1,19 @@
 import pandas as pd
 from sqlalchemy import create_engine, text
+from pathlib import Path
+
 
 # Create SQLite database
-engine = create_engine("sqlite:///mutual_fund.db")
+BASE_DIR = Path(__file__).resolve().parent
+DB_PATH = BASE_DIR / "data" / "db" / "bluestock_mf.db"
+
+engine = create_engine(f"sqlite:///{DB_PATH}")
 
 # Cleaned datasets
 datasets = {
-    "nav_history": "data/processed/nav_history_clean.csv",
-    "investor_transactions": "data/processed/investor_transactions_clean.csv",
-    "scheme_performance": "data/processed/scheme_performance_clean.csv"
+    "nav_history": "data/processed/02_nav_history_clean.csv",
+    "investor_transactions": "data/processed/08_investor_transactions_clean.csv",
+    "scheme_performance": "data/processed/07_scheme_performance_clean.csv"
 }
 
 print("=" * 60)
